@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 from codecs import open
 from os import path
 
-__version__ = '{{cookiecutter.version}}'
+__version__ = '0.1.0'
 
 here = path.abspath(path.dirname(__file__))
 
@@ -18,9 +18,9 @@ install_requires = [x.strip() for x in all_reqs if 'git+' not in x]
 dependency_links = [x.strip().replace('git+', '') for x in all_reqs if x.startswith('git+')]
 
 setup(
-    name='{{cookiecutter.app_name}}',
+    name='jn_emulator',
     version=__version__,
-    description='{{cookiecutter.project_short_description}}',
+    description='JuiceNet emulator',
     long_description=long_description,
     url='https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}',
     download_url='https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.app_name}}/tarball/' + __version__,
@@ -33,8 +33,8 @@ setup(
     keywords='',
     packages=find_packages(exclude=['docs', 'tests*']),
     include_package_data=True,
-    author='{{cookiecutter.full_name}}',
+    author='Andriy Fedorenko',
     install_requires=install_requires,
     dependency_links=dependency_links,
-    author_email='{{cookiecutter.email}}'
+    author_email='andriylfedorenko@gmail.com'
 )
