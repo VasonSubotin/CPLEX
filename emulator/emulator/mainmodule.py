@@ -1,32 +1,30 @@
-import sys
-sys.path.append('E:\Projects\emulatorrep\emulator')
+#staticPoint = 'https://bc65934f-ba9e-4ad7-be60-c64e867ceaa1.mock.pstmn.io'
+#staticPoint = 'https://emwemulator-api.azurewebsites.net/v1'
+#sys.path.append('E:\Projects\emulatorrep\emulator')
 
-import ccemulator
+import sys
+import emulator
 import uuid
 import time 
 import requests 
 import json
 import numpy as np
 import pandas as pd
-
-from ccemulator.APIRequest import APItoEmulator as api
-from APIRequest import APItoEmulator as api
+from emulator.APIRequest import APItoEmulator as api
 from os import path
 
-
-#staticPoint = 'https://emwemulator-api.azurewebsites.net/v1'
-staticPoint = 'https://emulator-api.juice.net/v1'
-#staticPoint = 'https://bc65934f-ba9e-4ad7-be60-c64e867ceaa1.mock.pstmn.io'
-Authorization = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYW5kcml5QGVtb3RvcndlcmtzLmNvbSIsImlzcyI6ImVtdWxhdG9yLWFwaS5lbW90b3J3ZXJrcy5jb20iLCJhdWQiOiJlbXVsYXRvci1hcGkuZW1vdG9yd2Vya3MuY29tIn0.lH_3YG1da8f2Uc6zperTjvXVnZ7R6Bb0ArtY3YZ6eNw"
+#staticPoint = 'https://emulator-api.juice.net/v1'
+#Authorization = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYW5kcml5QGVtb3RvcndlcmtzLmNvbSIsImlzcyI6ImVtdWxhdG9yLWFwaS5lbW90b3J3ZXJrcy5jb20iLCJhdWQiOiJlbXVsYXRvci1hcGkuZW1vdG9yd2Vya3MuY29tIn0.lH_3YG1da8f2Uc6zperTjvXVnZ7R6Bb0ArtY3YZ6eNw"
 
 class session:
-    def __init__(self, staticPoint = staticPoint, Authorization = Authorization):
+    def __init__(self,staticPoint, Authorization):
         self.staticPoint = staticPoint
+        self.Authorization = Authorization
         self.SessionId = uuid.uuid4()
         self.TemplateList = []
         print("SessionId: ",self.SessionId)
         self.wanted_keys = ["template_id", "voltage", "instant_current","temperature", "frequency","plugged_in","online","instance_count"]
-        self.Authorization = Authorization
+        
 
     
     def _GenerateCustomDataFrameForTemplates(self, number, instance_count):
@@ -117,7 +115,7 @@ class session:
         dic = dict((k, obj[k]) for k in self.wanted_keys if k in obj)
         if bool(dic): 
             if  not self._FindTemplateBasedOnId(dic["template_id"]):
-                temp = Template(staticPoint, list(dic.values()))
+                temp = Template(self.staticPoint, list(dic.values()))
                 self.TemplateList.append(temp)
             
             else:
@@ -169,7 +167,12 @@ class session:
         return("Hello Package!")
 
     def packtest(self):
-        self.GetAllTemplate()
+        self.GetAllTemplate(self)
+
+    def main(self):
+        s = session(staticPoint,Authorization)
+        s.GetAllTemplate(s)
+
         
 class Template(session):
 
@@ -193,11 +196,6 @@ class Template(session):
         print("dumps", dumps)
         return(dumps)
 
-
-
-    def main():
-        s = session(staticPoint,Authorization )
-        s.hello()
 
 
     if __name__=="__main__":
